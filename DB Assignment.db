@@ -1,0 +1,56 @@
+CREATE TABLE departments(
+id INTEGER PRIMARY KEY,
+department_name TEXT
+);
+
+CREATE TABLE employee (
+id INTEGER PRIMARY KEY,
+name TEXT,
+department_id INTEGER,
+salary INTEGER ,
+hire_date DATE,
+FOREIGN KEY(department_id) REFERENCES departments(id)
+);
+
+INSERT INTO departments (id, department_name) VALUES
+(1,'HR'),
+(2,'Engineering'),
+(3,'Sales');
+
+INSERT INTO employee(id,name,department_id,salary , hire_date) VALUES
+(1,'Trushna',1 ,15000,'11/12/2025'),
+(2,'Priya',2,25000,'19/9/2024'),
+(3,'Kamlesh',3,35000,'16/1/2021'),
+(4,'Soham',3,5000,'15/12/2021');
+
+/* BASIC TASK */
+
+select * from employee;
+
+select name 
+from employee 
+where department_id=(
+select id from departments where department_name='HR'
+);
+
+/*INTERMEDIATE TASK */
+
+ SELECT e.name, d.department_name from employee e join departments d on e.department_id=d.id;
+ 
+ select d.department_name , count(e.id) as employee_count from departments d left join employee e on e.department_id=d.id group by d.department_name;
+
+SELECT d.department_name , avg(e.salary) as average_salary from departments d join employee e on e.department_id=d.id
+group by d.department_name;
+
+select*from employee where hire_date>'1/10/23';
+
+select*from employee order by salary desc;
+
+/* ADVANCED TASK */
+ 
+select*from employee where salary>(select avg(salary)from employee);
+ 
+create INDEX idx_hire_date on employee(hire_date);
+
+select d.department_name, sum(e.salary) as total_salary from employee e join departments d on e.department_id=d.id group by d.department_name HAVING total_salary>10000;
+
